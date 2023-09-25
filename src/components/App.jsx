@@ -5,6 +5,14 @@ import ImageGallery from './ImageGallery/ImageGallery';
 import { fetchImgs } from './Api/api';
 import { Audio } from 'react-loader-spinner';
 import Button from './Button/Button';
+import styled from 'styled-components';
+
+const AppContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 16px;
+  padding-bottom: 24px;
+`;
 
 export class App extends Component {
   state = {
@@ -71,13 +79,19 @@ export class App extends Component {
     }
   };
 
+  showModale = () => {
+    this.setState(({ showModale }) => ({ showModale: !showModale }));
+  };
+
   render() {
-    const { images, isLoading, error, perPage, allImagesLoaded } = this.state;
+    const { images, isLoading, error, perPage, allImagesLoaded, showModale } =
+      this.state;
     const loadMoreButton =
       !allImagesLoaded && images.length > 0 && images.length % perPage === 0;
+    const loadModal = images.length > 0 && showModale;
 
     return (
-      <>
+      <AppContainer>
         <Searchbar onSubmit={this.handleSubmit} />
         {error && <p>Whoops, something went wrong: {error.message}</p>}
         {isLoading ? (
@@ -99,8 +113,8 @@ export class App extends Component {
             condition={allImagesLoaded}
           />
         )}
-        <Modal />
-      </>
+        {loadModal && <Modal image={images} onClick={this.showModale} />}
+      </AppContainer>
     );
   }
 }
