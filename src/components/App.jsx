@@ -61,10 +61,7 @@ export class App extends Component {
       const images = await fetchImgs(searchItem, perPage, page);
 
       this.setState(prevState => ({
-        images:
-          prevState.images.length <= images.totalHits
-            ? [...prevState.images, ...images.hits]
-            : prevState.images,
+        images: [...prevState.images, ...images.hits],
         allImagesLoaded: images.totalHits <= prevState.images.length,
       }));
     } catch (error) {
