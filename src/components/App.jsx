@@ -15,7 +15,7 @@ export class App extends Component {
     error: null,
     perPage: 12,
     page: 1,
-    allImagesLoaded: false, // New state variable
+    allImagesLoaded: false,
   };
 
   handleSubmit = searchQuery => {
@@ -24,7 +24,7 @@ export class App extends Component {
       page: 1,
       images: [],
       allImagesLoaded: false,
-    }); // Reset allImagesLoaded
+    });
   };
 
   async componentDidMount() {
