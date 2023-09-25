@@ -1,13 +1,9 @@
 import css from './Modal.module.css';
 
-const Modal = ({ images }) => {
+const Modal = ({ children }) => {
   return (
     <div className={css.overlay}>
-      <div className={css.modal}>
-        {/* {images.map(image => (
-          <img src={image.largeImageURL} alt={image.tags} />
-        ))} */}
-      </div>
+      <div className={css.modal}>{children}</div>
     </div>
   );
 };

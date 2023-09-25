@@ -24,15 +24,7 @@ export class App extends Component {
     perPage: 12,
     page: 1,
     allImagesLoaded: false,
-  };
-
-  handleSubmit = searchQuery => {
-    this.setState({
-      searchItem: searchQuery,
-      page: 1,
-      images: [],
-      allImagesLoaded: false,
-    });
+    selectedImage: null,
   };
 
   async componentDidMount() {
@@ -53,10 +45,21 @@ export class App extends Component {
     }
   }
 
+  handleSubmit = searchQuery => {
+    this.setState({
+      searchItem: searchQuery,
+      page: 1,
+      images: [],
+      allImagesLoaded: false,
+      selectedImage: null,
+    });
+  };
+
   async loadImages(searchItem, perPage, page) {
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true, showModale: false });
     try {
       const images = await fetchImgs(searchItem, perPage, page);
+
       this.setState(prevState => ({
         images:
           prevState.images.length <= images.totalHits
@@ -79,22 +82,39 @@ export class App extends Component {
     }
   };
 
-  showModale = () => {
-    this.setState(({ showModale }) => ({ showModale: !showModale }));
+  toggleModale = event => {
+    this.setState(prevState => ({
+      showModale: !prevState.showModale,
+    }));
+  };
+
+  showSelectedImage = event => {
+    const selectedImage = event.target.value;
+    this.setState({ selectedImage: selectedImage });
+    this.toggleModale();
   };
 
   render() {
-    const { images, isLoading, error, perPage, allImagesLoaded, showModale } =
-      this.state;
+    const {
+      images,
+      isLoading,
+      error,
+      perPage,
+      allImagesLoaded,
+      showModale,
+      selectedImage,
+    } = this.state;
     const loadMoreButton =
       !allImagesLoaded && images.length > 0 && images.length % perPage === 0;
-    const loadModal = images.length > 0 && showModale;
 
     return (
       <AppContainer>
         <Searchbar onSubmit={this.handleSubmit} />
         {error && <p>Whoops, something went wrong: {error.message}</p>}
-        {isLoading ? (
+        {images.length > 0 && (
+          <ImageGallery images={images} onImageClick={this.showSelectedImage} />
+        )}
+        {isLoading && (
           <Audio
             height={80}
             width={80}
@@ -103,8 +123,6 @@ export class App extends Component {
             ariaLabel="loading"
             wrapperStyle={{ position: 'absolute', top: '50%', left: '50%' }}
           />
-        ) : (
-          images.length > 0 && <ImageGallery images={images} />
         )}
         {loadMoreButton && (
           <Button
@@ -113,7 +131,13 @@ export class App extends Component {
             condition={allImagesLoaded}
           />
         )}
-        {loadModal && <Modal image={images} onClick={this.showModale} />}
+        {showModale && (
+          <Modal>
+            {selectedImage && (
+              <img src={selectedImage.largeImageURL} alt="image" />
+            )}
+          </Modal>
+        )}
       </AppContainer>
     );
   }
