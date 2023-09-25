@@ -1,12 +1,8 @@
 import css from './ImageGalleryItem.module.css';
 
-const ImageGalleryItem = ({ image, id, onImageClick }) => {
+const ImageGalleryItem = ({ image, id, onClick }) => {
   return (
-    <li
-      className={css.galleryItem}
-      key={id}
-      onClick={() => onImageClick(image)}
-    >
+    <li className={css.galleryItem} key={id} onClick={onClick}>
       <img src={image} alt="" className={css.image} />
     </li>
   );
