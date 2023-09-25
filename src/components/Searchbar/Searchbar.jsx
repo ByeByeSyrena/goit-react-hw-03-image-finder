@@ -12,8 +12,7 @@ class Searchbar extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const { searchQuery } = this.state;
-    this.props.onSubmit(searchQuery);
+    this.props.onSubmit(this.state.searchQuery);
     this.setState({
       searchQuery: '',
     });
@@ -32,8 +31,8 @@ class Searchbar extends Component {
           <input
             className={css.input}
             type="text"
-            autocomplete="off"
-            autofocus
+            autoComplete="off"
+            autoFocus
             placeholder="Search images and photos"
             onChange={this.handleChange}
             value={searchQuery}
