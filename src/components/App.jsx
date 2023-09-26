@@ -21,7 +21,7 @@ export class App extends Component {
     isLoading: false,
     searchItem: '',
     error: null,
-    perPage: 12,
+    perPage: 100,
     page: 1,
     allImagesLoaded: false,
     selectedImage: null,
@@ -59,6 +59,7 @@ export class App extends Component {
       images: [],
       allImagesLoaded: false,
       selectedImage: null,
+      totalHits: null,
     });
   };
 
@@ -66,11 +67,18 @@ export class App extends Component {
     this.setState({ isLoading: true, showModale: false });
     try {
       const images = await fetchImgs(searchItem, perPage, page);
+      const { totalHits } = images;
 
       this.setState(prevState => ({
         images: [...prevState.images, ...images.hits],
-        allImagesLoaded: images.totalHits <= prevState.images.length,
+        totalHits,
+        allImagesLoaded:
+          prevState.images.length + images.hits.length >= totalHits,
       }));
+
+      if (this.state.images === totalHits) {
+        this.setState({ allImagesLoaded: true });
+      }
     } catch (error) {
       this.setState({ error });
     } finally {
@@ -114,13 +122,10 @@ export class App extends Component {
       images,
       isLoading,
       error,
-      perPage,
       allImagesLoaded,
       showModale,
       selectedImage,
     } = this.state;
-    const loadMoreButton =
-      !allImagesLoaded && images.length > 0 && images.length % perPage === 0;
 
     return (
       <AppContainer>
@@ -139,11 +144,11 @@ export class App extends Component {
             wrapperStyle={{ position: 'absolute', top: '50%', left: '50%' }}
           />
         )}
-        {loadMoreButton && (
+        {images.length > 0 && (
           <Button
             text="Load more"
+            disabled={allImagesLoaded}
             clickHandle={this.showMoreImages}
-            condition={allImagesLoaded}
           />
         )}
         {showModale && (

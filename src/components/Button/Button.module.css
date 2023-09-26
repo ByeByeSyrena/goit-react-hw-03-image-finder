@@ -23,3 +23,7 @@
 .buttonLoadMore:focus {
   background-color: #303f9f;
 }
+
+.buttonLoadMore:disabled {
+  background-color: gray;
+}
