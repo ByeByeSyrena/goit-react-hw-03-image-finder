@@ -18,7 +18,6 @@ const API_KEY = "38857854-067aa7c8dbb389fbf2efb7da8";
             per_page: PER_PAGE,
         }
     });
-     console.log(data.hits);
      const { hits, totalHits } = data;
     return { hits, totalHits };
 };

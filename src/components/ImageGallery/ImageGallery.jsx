@@ -10,7 +10,7 @@ const ImageGallery = ({ images, onImageClick }) => {
             image={image.webformatURL}
             id={image.id}
             key={image.id}
-            onClick={onImageClick}
+            onImageClick={() => onImageClick(image)}
           />
         );
       })}

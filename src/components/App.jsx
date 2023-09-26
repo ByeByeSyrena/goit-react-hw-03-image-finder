@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import Modal from './Modal/Modal';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import { fetchImgs } from './Api/api';
 import { Audio } from 'react-loader-spinner';
 import Button from './Button/Button';
-import styled from 'styled-components';
 
 const AppContainer = styled.div`
   display: grid;
@@ -32,6 +32,13 @@ export class App extends Component {
     if (searchItem) {
       this.loadImages(searchItem, perPage, page);
     }
+
+    window.addEventListener('keydown', this.handleKeyDown);
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -79,16 +86,27 @@ export class App extends Component {
     }
   };
 
-  toggleModale = event => {
+  handleKeyDown = event => {
+    if (event.code === 'Escape') {
+      this.setState({ showModale: false });
+    }
+  };
+
+  handleBackdropClick = event => {
+    if (event.target === event.currentTarget) {
+      this.toggleModal();
+    }
+  };
+
+  toggleModal = () => {
     this.setState(prevState => ({
       showModale: !prevState.showModale,
     }));
   };
 
-  showSelectedImage = event => {
-    const selectedImage = event.target.value;
-    this.setState({ selectedImage: selectedImage });
-    this.toggleModale();
+  showSelectedImage = selectedImage => {
+    this.setState({ selectedImage });
+    this.toggleModal();
   };
 
   render() {
@@ -129,9 +147,9 @@ export class App extends Component {
           />
         )}
         {showModale && (
-          <Modal>
+          <Modal onClick={this.handleBackdropClick}>
             {selectedImage && (
-              <img src={selectedImage.largeImageURL} alt="image" />
+              <img src={selectedImage.largeImageURL} alt={selectedImage.tags} />
             )}
           </Modal>
         )}
@@ -139,3 +157,5 @@ export class App extends Component {
     );
   }
 }
+
+export default App;
