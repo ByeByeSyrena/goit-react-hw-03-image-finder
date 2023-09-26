@@ -21,7 +21,7 @@ export class App extends Component {
     isLoading: false,
     searchItem: '',
     error: null,
-    perPage: 100,
+    perPage: 12,
     page: 1,
     allImagesLoaded: false,
     selectedImage: null,
