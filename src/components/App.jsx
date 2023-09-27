@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Modal from './Modal/Modal';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
-import { fetchImgs } from './Api/api';
+import { fetchImgs } from '../api';
 import { Audio } from 'react-loader-spinner';
 import Button from './Button/Button';
 
@@ -21,25 +21,10 @@ export class App extends Component {
     isLoading: false,
     searchItem: '',
     error: null,
-    perPage: 12,
     page: 1,
     allImagesLoaded: false,
     selectedImage: null,
   };
-
-  async componentDidMount() {
-    const { searchItem, perPage, page } = this.state;
-    if (searchItem) {
-      this.loadImages(searchItem, perPage, page);
-    }
-
-    window.addEventListener('keydown', this.handleKeyDown);
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
 
   async componentDidUpdate(prevProps, prevState) {
     const { searchItem, perPage, page } = this.state;
@@ -94,12 +79,6 @@ export class App extends Component {
     }
   };
 
-  handleKeyDown = event => {
-    if (event.code === 'Escape') {
-      this.setState({ showModale: false });
-    }
-  };
-
   handleBackdropClick = event => {
     if (event.target === event.currentTarget) {
       this.toggleModal();
@@ -149,6 +128,7 @@ export class App extends Component {
             text="Load more"
             disabled={allImagesLoaded}
             clickHandle={this.showMoreImages}
+            isLoading={isLoading}
           />
         )}
         {showModale && (

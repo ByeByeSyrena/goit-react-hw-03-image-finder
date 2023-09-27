@@ -1,11 +1,11 @@
 import css from './Button.module.css';
 
-const Button = ({ text, clickHandle, disabled }) => {
+const Button = ({ text, clickHandle, disabled, isLoading }) => {
   return (
     <button
       type="button"
       onClick={clickHandle}
-      className={css.buttonLoadMore}
+      className={isLoading ? css.visuallyHidden : css.buttonLoadMore}
       disabled={disabled}
     >
       {disabled ? 'No more images' : text}
