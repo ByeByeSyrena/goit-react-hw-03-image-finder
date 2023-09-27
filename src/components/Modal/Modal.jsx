@@ -19,6 +19,11 @@ class Modal extends Component {
     }
   };
 
+  handleBackdropClick = event => {
+    if (event.target === event.currentTarget) {
+      this.toggleModal();
+    }
+  };
   render() {
     const { children, onClick } = this.props;
 

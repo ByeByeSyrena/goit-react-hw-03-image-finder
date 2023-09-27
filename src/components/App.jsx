@@ -79,12 +79,6 @@ export class App extends Component {
     }
   };
 
-  handleBackdropClick = event => {
-    if (event.target === event.currentTarget) {
-      this.toggleModal();
-    }
-  };
-
   toggleModal = () => {
     this.setState(prevState => ({
       showModale: !prevState.showModale,
