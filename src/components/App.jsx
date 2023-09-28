@@ -24,17 +24,12 @@ export class App extends Component {
     page: 1,
     allImagesLoaded: false,
     selectedImage: null,
-    perPage: 1,
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    const { searchItem, perPage, page } = this.state;
-    if (
-      searchItem !== prevState.searchItem ||
-      perPage !== prevState.perPage ||
-      page !== prevState.page
-    ) {
-      this.loadImages(searchItem, perPage, page);
+    const { searchItem, page } = this.state;
+    if (searchItem !== prevState.searchItem || page !== prevState.page) {
+      this.loadImages(searchItem, page);
     }
   }
 
@@ -49,10 +44,10 @@ export class App extends Component {
     });
   };
 
-  async loadImages(searchItem, perPage, page) {
+  async loadImages(searchItem, page) {
     this.setState({ isLoading: true, showModale: false });
     try {
-      const images = await fetchImgs(searchItem, perPage, page);
+      const images = await fetchImgs(searchItem, page);
       const { totalHits } = images;
 
       this.setState(prevState => ({
@@ -84,6 +79,12 @@ export class App extends Component {
     this.setState(prevState => ({
       showModale: !prevState.showModale,
     }));
+  };
+
+  handleBackdropClick = event => {
+    if (event.target === event.currentTarget) {
+      this.toggleModal();
+    }
   };
 
   showSelectedImage = selectedImage => {
