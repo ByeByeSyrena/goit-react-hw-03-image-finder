@@ -24,6 +24,7 @@ export class App extends Component {
     page: 1,
     allImagesLoaded: false,
     selectedImage: null,
+    perPage: 1,
   };
 
   async componentDidUpdate(prevProps, prevState) {
